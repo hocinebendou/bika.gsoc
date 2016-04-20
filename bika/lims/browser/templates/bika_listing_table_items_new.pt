@@ -1,0 +1,60 @@
+<tr tal:condition="not: view/this_cat_selected"
+    tal:attributes="data-ajax_category view/cat"
+    style="display:none"
+    tal:define="
+            global rowspan python:{};
+            global rowspan_max python:{};
+            global colspan python:1;
+            global colspan_max python:1;"/>
+
+<tal:items tal:condition="view/this_cat_selected"
+           tal:repeat="item view/this_cat_batch">
+
+    <tr tal:define="
+            keyword python:item.has_key('Keyword') and item['Keyword'] or '';
+            portal context/@@plone_portal_state/portal;
+            suid python:item.get('service_uid','');
+            tmpstyle python:view.context.bika_setup.getEnableAnalysisRemarks() and 'border-bottom:0 !important;;' or '';
+            tabindex view/tabindex;"
+        tal:attributes="
+            style tmpstyle;
+            cat python:item.get('category', 'None');
+            class python:item.get('table_row_class', '');
+            id string:folder-contents-item-${item/uid};
+            uid python: item['uid'] if 'uid' in item else None;
+            keyword python: keyword if keyword else None;
+            as_uid python: suid if suid else None;
+            title python: item['title'] if 'title' in item else None;
+            price python: item['price'] if 'price' in item else None;
+            vat_percentage python: item['vat_percentage'] if 'vat_percentage' in item else None">
+
+        <input type="hidden" tal:attributes="
+               id string:${item/uid}_row_data;
+               value item/row_data|nothing;"/>
+
+        <td tal:condition="view/bika_listing/show_sort_column" class="draggable">
+            <tal:block tal:define="quoted_id item/uid;">
+                <a href=""
+                   i18n:domain="plone"
+                   title="Move item up"
+                   i18n:attributes="title title_move_item_up;"
+                   tal:attributes="href string:${view/base_url}/folder_position?position=up&amp;id=${quoted_id}">
+                    &#9650;
+                </a>
+                <a href=""
+                   i18n:domain="plone"
+                   title="Move item down"
+                   i18n:attributes="title title_move_item_down;"
+                   tal:attributes="href string:${view/base_url}/folder_position?position=down&amp;id=${quoted_id}">
+                    &#9660;
+                </a>
+            </tal:block>
+        </td>
+
+        <td tal:content="python:1"></td>
+
+
+
+    </tr>
+
+</tal:items>
