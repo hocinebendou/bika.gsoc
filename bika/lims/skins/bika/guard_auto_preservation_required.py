@@ -21,7 +21,6 @@ from DateTime import DateTime
 workflow = context.portal_workflow
 
 if context.portal_type == 'Sample':
-
     parts = context.objectValues("SamplePartition")
     if not parts:
         # AR is being created - AR Add will transition us.
@@ -41,7 +40,6 @@ if context.portal_type == 'Sample':
     return preservation_required
 
 elif context.portal_type == 'AnalysisRequest':
-
     sample = context.getSample()
     if not sample:
         # AR is being created - AR Add will transition us.
@@ -61,7 +59,6 @@ elif context.portal_type == 'AnalysisRequest':
     return preservation_required
 
 elif context.portal_type == 'SamplePartition':
-
     analyses = context.getBackReferences('AnalysisSamplePartition')
     if not analyses:
         # AR is being created - AR Add will transition us.

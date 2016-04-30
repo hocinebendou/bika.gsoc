@@ -543,7 +543,6 @@ function AnalysisRequestAddByCol() {
             .not("#singleservice")
             .not(".referencewidget")
             .live('change copy', function () {
-                console.log('salam');
                 textinput_change_handler(this)
             })
             .each(function (i, e) {

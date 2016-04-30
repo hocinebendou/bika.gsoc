@@ -43,36 +43,90 @@ class StorageLocationsView(BikaListingView):
         self.columns = {
             'Title': {'title': _('Storage Location'),
                       'index':'sortable_title'},
-            'Description': {'title': _('Description'),
-                            'index': 'description',
-                            'toggle': True},
+            'Room': {'title': _('Room'),
+                     'toggle': True},
+            'Type': {'title': _('Storage Type'),
+                     'toggle': True},
             'Hierarchy': {'title': _('Hierarchy'),
+                          'toggle': True},
+            'StockItem': {'title': _('Stock Item'),
                           'toggle': True},
         }
 
+        # ________________________________ #
+        #    HOCINE ADD POSITION WORKFLOW  #
+        # ________________________________ #
         self.review_states = [
             {'id':'default',
              'title': _('Active'),
-             'contentFilter': {'inactive_state': 'active'},
-             'transitions': [{'id':'deactivate'}, ],
+             'contentFilter': {'inactive_state': 'active',
+                               'sort_on': 'created',
+                               'sort_order': 'ascending'},
+             'transitions': [{'id':'deactivate'},
+                             {'id': 'reserve'},
+                             {'id': 'occupy'},],
              'columns': ['Title',
-                         'Description',
+                         'Room',
+                         'Type',
                          'Hierarchy',
+                         'StockItem',
                         ]},
             {'id':'inactive',
              'title': _('Dormant'),
              'contentFilter': {'inactive_state': 'inactive'},
              'transitions': [{'id':'activate'}, ],
              'columns': ['Title',
-                         'Description',
+                         'Room',
+                         'Type',
                          'Hierarchy',
+                         'StockItem',
                         ]},
+            {'id': 'position_free',
+             'title': _('Free'),
+             'contentFilter': {'review_state': 'position_free',
+                               'sort_on': 'created',
+                               'sort_order': 'reverse'},
+             'transitions': [{'id': 'deactivate'},
+                             {'id': 'reserve'},
+                             {'id': 'occupy'}],
+             'columns': ['Title',
+                         'Room',
+                         'Type',
+                         'Hierarchy',
+                         ]},
+            {'id': 'position_reserved',
+             'title': _('Reserved'),
+             'contentFilter': {'review_state': 'position_reserved',
+                               'sort_on': 'created',
+                               'sort_order': 'reverse'},
+             'transitions': [{'id': 'deactivate'},
+                             {'id': 'occupy'}, ],
+             'columns': ['Title',
+                         'Room',
+                         'Type',
+                         'Hierarchy',
+                         ]},
+            {'id': 'position_occupied',
+             'title': _('Occupied'),
+             'contentFilter': {'review_state': 'position_occupied',
+                               'sort_on': 'created',
+                               'sort_order': 'reverse'},
+             'transitions': [{'id': 'deactivate'},],
+             'columns': ['Title',
+                         'Room',
+                         'Type',
+                         'Hierarchy',
+                         'StockItem',
+                         ]},
             {'id':'all',
              'title': _('All'),
-             'contentFilter':{},
+             'contentFilter':{'sort_on': 'created',
+                              'sort_order': 'ascending'},
              'columns': ['Title',
-                         'Description',
+                         'Room',
+                         'Type',
                          'Hierarchy',
+                         'StockItem',
                         ]},
         ]
 
@@ -83,8 +137,10 @@ class StorageLocationsView(BikaListingView):
             obj = items[x]['obj']
             items[x]['replace']['Title'] = "<a href='%s'>%s</a>" % \
                  (items[x]['url'], items[x]['Title'])
-            items[x]['Description'] = obj.Description()
+            items[x]['Room'] = obj.getRoom()
+            items[x]['Type'] = obj.getStorageType()
             items[x]['Hierarchy'] = obj.getHierarchy()
+            items[x]['StockItem'] = obj.getProduct() and obj.getProduct().Title() or ''
             # if obj.aq_parent.portal_type == 'Client':
             #     items[x]['Owner'] = obj.aq_parent.Title()
             # else:

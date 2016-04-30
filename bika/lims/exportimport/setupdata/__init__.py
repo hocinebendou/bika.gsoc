@@ -2296,5 +2296,6 @@ class Stock_Items(WorksheetImporter):
                 IsStored=row.get('isStored')
             )
             obj.setProduct(product)
+            obj.at_post_create_script()
             obj.unmarkCreationFlag()
             renameAfterCreation(obj)

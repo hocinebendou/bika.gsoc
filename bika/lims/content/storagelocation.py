@@ -21,25 +21,30 @@ schema = BikaSchema.copy() + Schema((
         widget=StringWidget(visible=False),
     ),
     ReferenceField('Product',
-        required=1,
         vocabulary_display_path_bound = sys.maxint,
-        allowed_types=('Stock Item',),
+        allowed_types=('StockItem',),
         relationship='StockItemLocation',
         referenceClass=HoldingReference,
         widget=bika_ReferenceWidget(
-            label = _("Stock Item"),
+            label=_("Stock Item"),
             catalog_name='bika_setup_catalog',
-            showOn=False,
+            showOn=True,
             description=_("Start typing to filter the list of available products."),
+            ui_item='ProductTitle',
+            search_fields=('ProductTitle', 'StockItemID',),
+            colModel=[{'columnName': 'UID', 'hidden': True},
+                      {'columnName': 'StockItemID', 'width': '35', 'label': _("Stock Item ID"), 'align': 'left'},
+                      {'columnName': 'ProductTitle', 'width': '65', 'label': _('Product'), 'align': 'left'},
+                      ],
         )),
 
     StringField(
         'Room',
-        widget=StringWidget(visible=False),
+        widget=StringWidget(visible=True),
     ),
     StringField(
         'StorageType',
-        widget=StringWidget(visible=False),
+        widget=StringWidget(visible=True),
     ),
     StringField(
         'Shelf',
@@ -70,47 +75,6 @@ class StorageLocation(BaseContent, HistoryAwareMixin):
 
     def Title(self):
         return safe_unicode(self.getField('title').get(self)).encode('utf-8')
-
-    def getHierarchy(self, char='>'):
-        ancestors = []
-        ancestor = self
-        # portal_types = [o.portal_type for o in ancestor.aq_chain if hasattr(o, 'portal_type')]
-        # if not 'StorageUnit' not in portal_types:
-        #     return ''
-
-        portal_types = []
-        for o in ancestor.aq_chain:
-            if hasattr(o, 'portal_type'):
-                portal_types.append(o.portal_type)
-
-        if not 'StorageUnit' in portal_types:
-            return ''
-
-        for obj in ancestor.aq_chain:
-            ancestors.append(obj.getId())
-            if obj.portal_type == 'StorageUnit':
-                break
-
-        return char.join(reversed(ancestors))
-
-    def getChain(self):
-        chain = []
-        ancestor = self
-
-        portal_types = []
-        for o in ancestor.aq_chain:
-            if hasattr(o, 'portal_type'):
-                portal_types.append(o.portal_type)
-
-        if not 'StorageUnit' in portal_types:
-            return ''
-
-        for obj in ancestor.aq_chain:
-            chain.append(obj)
-            if obj.portal_type == 'StorageUnit':
-                break
-
-        return chain
 
 registerType(StorageLocation, PROJECTNAME)
 

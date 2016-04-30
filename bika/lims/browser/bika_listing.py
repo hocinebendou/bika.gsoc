@@ -524,8 +524,9 @@ class BikaListingView(BrowserView):
                                         else 'ascending'
         else:
             # By default, sort on created
-            self.sort_on = self.contentFilter.get('sort_on', None) and self.contentFilter['sort_on'] or 'reverse'
-            self.sort_order = self.contentFilter.get('sort_order', None) and self.contentFilter['sort_order'] or 'created'
+            # THESE TWO LINES ARE CREATED BY HOCINE. THE ORIGINAL ONES ARE THE TWO COMMENTED BELOW.
+            self.sort_on = self.contentFilter.get('sort_on', None) and self.contentFilter['sort_on'] or 'created'
+            self.sort_order = self.contentFilter.get('sort_order', None) and self.contentFilter['sort_order'] or 'reverse'
             #self.sort_order = 'reverse'
             #self.sort_on = 'created'
 

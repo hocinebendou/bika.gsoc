@@ -213,6 +213,15 @@ def generateUniqueId(context):
             else:
                 return context.Title().replace(' ', '')
 
+        if context.portal_type == "Kit":
+            prefix = context.getPrefix() and context.getPrefix() or "KIT"
+            padding = 3
+            new_id = next_id(prefix)
+            if padding:
+                new_id = new_id.zfill(int(padding))
+
+            return ('%s' + '-' + '%s') % (prefix, new_id)
+
         if context.portal_type == "StorageLocation":
             return context.Title()
 

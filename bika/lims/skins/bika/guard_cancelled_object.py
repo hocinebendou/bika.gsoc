@@ -9,7 +9,6 @@
 ##
 
 workflow = context.portal_workflow
-
 # Note: Also used by profiles/default/types/AnalysisRequest.xml
 
 # Can't do anything to the object if it's cancelled

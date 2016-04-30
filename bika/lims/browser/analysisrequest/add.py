@@ -464,8 +464,6 @@ class ajaxAnalysisRequestSubmit():
         self.context.plone_utils.addPortalMessage(message, 'info')
         # Automatic label printing won't print "register" labels for Secondary. ARs
         new_ars = [ar for ar in ARs if ar[-2:] == '01']
-        print(new_ars)
-        print(self.context.bika_setup.getAutoPrintStickers())
         if 'register' in self.context.bika_setup.getAutoPrintStickers() \
                 and new_ars:
             return json.dumps({

@@ -44,6 +44,13 @@ schema = BikaSchema.copy() + Schema((
             visible = {'edit':'hidden', }
         ),
     ),
+    ComputedField('ProductTitle',
+        expression='context.getProduct().Title()',
+        widget=ComputedWidget(
+          label=_("Product Title"),
+          visible={'edit':'hidden'}
+        ),
+    ),
     ComputedField('ProductCategoryTitle',
         expression = 'context.getProduct().getCategoryTitle()',
         widget = ComputedWidget(
@@ -130,11 +137,17 @@ class StockItem(BaseContent):
     def _renameAfterCreation(self, check_auto_id=False):
         from bika.lims.idserver import renameAfterCreation
         renameAfterCreation(self)
+        #self.at_post_create_script()
 
     def getProductTitle(self):
         return self.getProduct().Title()
 
     def getStockItemId(self):
         return self.getId()
+
+    #______HOCINE ADDED IT_________#
+    def at_post_create_script(self):
+        title = self.getProductTitle()
+        self.setTitle(title)
 
 registerType(StockItem, config.PROJECTNAME)
