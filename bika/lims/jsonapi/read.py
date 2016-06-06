@@ -67,7 +67,6 @@ def read(context, request):
 
     # Get matching objects from catalog
     proxies = catalog(**contentFilter)
-
     # batching items
     page_nr = int(request.get("page_nr", 0))
     try:

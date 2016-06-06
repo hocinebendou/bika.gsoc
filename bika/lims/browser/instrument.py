@@ -1,10 +1,7 @@
-from Products.CMFPlone.utils import safe_unicode
 from bika.lims import bikaMessageFactory as _
 from bika.lims.utils import t
-from bika.lims.browser.bika_listing import BikaListingView
 from bika.lims.content.instrumentmaintenancetask import InstrumentMaintenanceTaskStatuses as mstatus
 from bika.lims.subscribers import doActionFor, skip
-from operator import itemgetter
 from plone.app.content.browser.interfaces import IFolderContentsView
 from plone.app.layout.globals.interfaces import IViewView
 from plone.app.layout.viewlets import ViewletBase
@@ -13,7 +10,6 @@ from bika.lims.browser.bika_listing import BikaListingView
 from bika.lims.config import QCANALYSIS_TYPES
 from bika.lims.utils import to_utf8
 from bika.lims.permissions import *
-from operator import itemgetter
 from bika.lims.browser import BrowserView
 from bika.lims.browser.analyses import AnalysesView
 from bika.lims.browser.multifile import MultifileView

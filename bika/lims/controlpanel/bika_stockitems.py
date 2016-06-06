@@ -49,8 +49,6 @@ class StockItemsView(BikaListingView):
                       'toggle': True},
             'orderId': {'title': _('Order Id'),
                        'toggle': True},
-            'labId': {'title': _('Lab Id'),
-                       'toggle': False},
             'batchId': {'title': _('Batch Id'),
                        'index' : 'getBatchId',
                        'toggle': True},
@@ -82,7 +80,6 @@ class StockItemsView(BikaListingView):
              'transitions': [{'id':'discard'}, ],
              'columns': ['stockitemID',
                          'orderId',
-                         'labId',
                          'batchId',
                          'product',
                          'supplier',
@@ -100,7 +97,6 @@ class StockItemsView(BikaListingView):
              'transitions': [{'id':'keep'}, ],
              'columns': ['stockitemID',
                          'orderId',
-                         'labId',
                          'batchId',
                          'product',
                          'supplier',
@@ -117,7 +113,6 @@ class StockItemsView(BikaListingView):
              'contentFilter':{},
              'columns': ['stockitemID',
                          'orderId',
-                         'labId',
                          'batchId',
                          'product',
                          'Supplier',
@@ -137,7 +132,6 @@ class StockItemsView(BikaListingView):
             if not items[x].has_key('obj'): continue
             obj = items[x]['obj']
             items[x]['orderId'] = obj.getOrderId()
-            items[x]['labId'] = obj.getLabId()
             items[x]['batchId'] = obj.getBatchId()
             items[x]['product'] = obj.getProductTitle()
             items[x]['supplier'] = obj.getSupplierTitle()

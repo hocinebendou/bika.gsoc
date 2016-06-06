@@ -44,10 +44,6 @@ class ProductsView(BikaListingView):
                     'toggle': True},
             'SupplierCatalogueID': {'title': _('Supplier Catalogue ID'),
                                     'toggle': False},
-            'Quantity': {'title': _('Quantity'),
-                         'toggle': True},
-            'Toxicity': {'title': _('Toxicity'),
-                         'toggle': False},
             'VATAmount': {'title': _('VATAmount'),
                            'toggle': True},
             'Price': {'title': _('Price'),
@@ -63,8 +59,6 @@ class ProductsView(BikaListingView):
              'columns': ['Title',
                          'Category',
                          'CAS',
-                         'Quantity',
-                         'Toxicity',
                          'VATAmount',
                          'Price',
                          'TotalPrice']},
@@ -75,8 +69,6 @@ class ProductsView(BikaListingView):
              'columns': ['Title',
                          'Category',
                          'CAS',
-                         'Quantity',
-                         'Toxicity',
                          'VATAmount',
                          'Price',
                          'TotalPrice']},
@@ -86,8 +78,6 @@ class ProductsView(BikaListingView):
              'columns': ['Title',
                          'Category',
                          'CAS',
-                         'Quantity',
-                         'Toxicity',
                          'VATAmount',
                          'Price',
                          'TotalPrice']},
@@ -100,10 +90,6 @@ class ProductsView(BikaListingView):
             obj = items[x]['obj']
             items[x]['Category'] = obj.getCategoryTitle()
             items[x]['CAS'] = obj.getCAS()
-            items[x]['Quantity'] = obj.getQuantity()
-            if obj.getQuantity() and obj.getUnit():
-                items[x]['Quantity'] = str(obj.getQuantity())
-            items[x]['Toxicity'] = obj.getToxicity()
             items[x]['VATAmount'] = obj.getVATAmount()
             items[x]['Price'] = obj.getPrice()
             items[x]['TotalPrice'] = obj.getTotalPrice()

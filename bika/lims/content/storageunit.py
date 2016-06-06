@@ -52,32 +52,17 @@ schema = BikaFolderSchema.copy() + BikaSchema.copy() + Schema((
             description=_('The laboratory department'),
         ),
     ),
-    StringField('Floor',
-        schemata = 'Details',
-        widget=StringWidget(
-            label = _('Floor'),
-        ),
-    ),
     TextField('Address',
-        schemata = 'Details',
         default_output_type = 'text/plain',
         allowable_content_types = ('text/plain',),
         widget=TextAreaWidget(
             label = _('Address')),
     ),
-    TextField('StorageInstructions',
-        schemata = 'Details',
-        default_output_type = 'text/plain',
-        allowable_content_types = ('text/plain',),
-        widget=TextAreaWidget(
-            label = _('Storage Instructions')),
-            description=_('Instructions for managing the storage unit'),
-    ),
-    FileField('StorageDocument',
-        schemata = 'Details',
-        widget=FileWidget(
-            label = _('Instructions document')),
-    ),
+    # FileField('StorageDocument',
+    #     schemata = 'Details',
+    #     widget=FileWidget(
+    #         label = _('Instructions document')),
+    # ),
 ))
 
 schema['description'].schemata = 'default'

@@ -86,6 +86,7 @@ class AnalysisRequestViewView(BrowserView):
                 if getSecurityManager().checkPermission(EditFieldResults, self.context) \
                    and poc == 'field':
                     t.review_states[0]['columns'].remove('DueDate')
+
                 self.tables[POINTS_OF_CAPTURE.getValue(poc)] = t.contents_table()
         # Un-captured field analyses may cause confusion
         if ar.getAnalyses(getPointOfCapture='field',

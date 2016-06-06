@@ -302,6 +302,7 @@ class AnalysisRequestAddView(AnalysisRequestViewView):
 
         if not s.ar_add_items:
             return ''
+
         return s.contents_table()
 
 

@@ -1052,14 +1052,14 @@ function AnalysisRequestAddByCol() {
             profile.attr('services', arprofile_services_uid);
             // Setting the services checkboxes
             if ($('#singleservice').length > 0) {
-                defs.push(expand_services_singleservice(arnum, service_data))
+                defs.push(expand_services_singleservice(arnum, service_data));
             }
             else {
-                defs.push(expand_services_bika_listing(arnum, service_data))
+                defs.push(expand_services_bika_listing(arnum, service_data));
             }
             // Call $.when with all deferreds
             $.when.apply(null, defs).then(function () {
-                d.resolve()
+                d.resolve();
             })
         });
         return d.promise()
@@ -1247,9 +1247,9 @@ function AnalysisRequestAddByCol() {
     }
 
     function template_unset(arnum) {
-        var td = $("tr[fieldname='Template'] td[arnum='" + arnum + "']")
-        $(td).find("input[type='text']").val("").attr("uid", "")
-        $(td).find("input[id$='_uid']").val("")
+        var td = $("tr[fieldname='Template'] td[arnum='" + arnum + "']");
+        $(td).find("input[type='text']").val("").attr("uid", "");
+        $(td).find("input[id$='_uid']").val("");
     }
 
     function drymatter_selected() {
@@ -1609,20 +1609,20 @@ function AnalysisRequestAddByCol() {
     function expand_services_bika_listing(arnum, service_data) {
         // When the bika_listing serviceselector is in place,
         // this function is called to select services for Profiles and Templates.
-        var d = $.Deferred()
-        var services = []
-        var defs = []
-        var expanded_categories = []
+        var d = $.Deferred();
+        var services = [];
+        var defs = [];
+        var expanded_categories = [];
         for (var si = 0; si < service_data.length; si++) {
             // Expand category
-            var service = service_data[si]
-            services.push(service)
+            var service = service_data[si];
+            services.push(service);
             var th = $("table[form_id='" + service['PointOfCapture'] + "'] " +
-                       "th[cat='" + service['CategoryTitle'] + "']")
+                       "th[cat='" + service['CategoryTitle'] + "']");
             if(expanded_categories.indexOf(th) < 0) {
-                expanded_categories.push(th)
-                var def = $.Deferred()
-                def = category_header_expand_handler(th)
+                expanded_categories.push(th);
+                var def = $.Deferred();
+                def = category_header_expand_handler(th);
                 defs.push(def)
             }
         }
@@ -1632,10 +1632,10 @@ function AnalysisRequestAddByCol() {
             for (var si = 0; si < services.length; si++) {
                 analysis_cb_check(arnum, services[si]['UID'])
             }
-            recalc_prices(arnum)
-            d.resolve()
+            recalc_prices(arnum);
+            d.resolve();
         })
-        return d.promise()
+        return d.promise();
     }
 
     function uncheck_all_services(arnum) {
@@ -1680,7 +1680,7 @@ function AnalysisRequestAddByCol() {
 
          :param: element - The category header TH element which normally receives 'click' event
          */
-        var def = $.Deferred()
+        var def = $.Deferred();
         // with form_id allow multiple ajax-categorised tables in a page
         var form_id = $(element).parents("[form_id]").attr("form_id")
         var cat_title = $(element).attr('cat')
@@ -1804,11 +1804,11 @@ function AnalysisRequestAddByCol() {
          */
         var cb = $("tr[uid='" + uid + "'] " +
                    "td[class*='ar\\." + arnum + "'] " +
-                   "input[type='checkbox']")
-        $(cb).attr("checked", true)
-        analysis_cb_after_change(arnum, uid)
-        state_analyses_push(arnum, uid)
-        specification_apply()
+                   "input[type='checkbox']");
+        $(cb).attr("checked", true);
+        analysis_cb_after_change(arnum, uid);
+        state_analyses_push(arnum, uid);
+        specification_apply();
     }
 
     function analysis_cb_uncheck(arnum, uid) {
@@ -1831,9 +1831,10 @@ function AnalysisRequestAddByCol() {
                    "input[type='checkbox']")
         var tr = $(cb).parents("tr")
         var checked = $(cb).prop("checked")
-        var checkboxes = $(tr).find("input[type=checkbox][name!='uids:list']")
+        var checkboxes = $(tr).find("input[type=checkbox][name!='uids:list']");
+        console.log($(tr).find("[name='uids:list']"));
         // sync the select-all checkbox state
-        var nr_checked = $(checkboxes).filter(":checked")
+        var nr_checked = $(checkboxes).filter(":checked");
         if (nr_checked.length == checkboxes.length) {
             $(tr).find("[name='uids:list']").attr("checked", true)
         }

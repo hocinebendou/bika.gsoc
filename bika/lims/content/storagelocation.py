@@ -16,10 +16,12 @@ schema = BikaSchema.copy() + Schema((
         default=0,
         widget=BooleanWidget(visible=False),
     ),
+
     StringField(
         'StockItemID',
         widget=StringWidget(visible=False),
     ),
+
     ReferenceField('Product',
         vocabulary_display_path_bound = sys.maxint,
         allowed_types=('StockItem',),
@@ -31,12 +33,38 @@ schema = BikaSchema.copy() + Schema((
             showOn=True,
             description=_("Start typing to filter the list of available products."),
             ui_item='ProductTitle',
-            search_fields=('ProductTitle', 'StockItemID',),
+            search_fields=('ProductTitle', 'id',),
             colModel=[{'columnName': 'UID', 'hidden': True},
-                      {'columnName': 'StockItemID', 'width': '35', 'label': _("Stock Item ID"), 'align': 'left'},
+                      {'columnName': 'id', 'width': '35', 'label': _("Stock Item ID"), 'align': 'left'},
                       {'columnName': 'ProductTitle', 'width': '65', 'label': _('Product'), 'align': 'left'},
                       ],
         )),
+
+    ReferenceField('Sampletemp',
+        vocabulary_display_path_bound=sys.maxint,
+        allowed_types=('Sampletemp',),
+        relationship='SampletempLocation',
+        referenceClass=HoldingReference,
+        widget=bika_ReferenceWidget(
+           label=_("Sample"),
+           showOn=True,
+           description=_("Start typing to filter the list of available samples."),
+        )),
+
+    ReferenceField(
+        'ParentBox',
+        required=1,
+        allowed_types=('StorageManagement',),
+        referenceClass=HoldingReference,
+        relationship='StorageManagementLocation',
+        widget=bika_ReferenceWidget(
+            label=_('Box/Cane'),
+            size=30,
+            catalog_name='bika_setup_catalog',
+            base_query={'inactive_state': 'active'},
+            showOn=True,
+        ),
+    ),
 
     StringField(
         'Room',

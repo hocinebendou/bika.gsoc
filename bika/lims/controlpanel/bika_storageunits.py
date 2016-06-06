@@ -44,11 +44,7 @@ class StorageUnitsView(BikaListingView):
                                     'toggle': True},
             'Department': {'title': _('Department'),
                          'toggle': True},
-            'Floor': {'title': _('Floor'),
-                           'toggle': True},
             'Address': {'title': _('Address'),
-                           'toggle': False},
-            'StorageInstructions': {'title': _('Storage Instructions'),
                            'toggle': False},
         }
         self.review_states = [
@@ -60,9 +56,7 @@ class StorageUnitsView(BikaListingView):
                          'Description',
                          'Temperature',
                          'Department',
-                         'Floor',
-                         'Address',
-                         'StorageInstructions']},
+                         'Address']},
             {'id':'inactive',
              'title': _('Dormant'),
              'contentFilter': {'inactive_state': 'inactive'},
@@ -71,9 +65,7 @@ class StorageUnitsView(BikaListingView):
                          'Description',
                          'Temperature',
                          'Department',
-                         'Floor',
-                         'Address',
-                         'StorageInstructions']},
+                         'Address']},
             {'id':'all',
              'title': _('All'),
              'contentFilter':{},
@@ -81,9 +73,7 @@ class StorageUnitsView(BikaListingView):
                          'Description',
                          'Temperature',
                          'Department',
-                         'Floor',
-                         'Address',
-                         'StorageInstructions']},
+                         'Address']},
         ]
 
     def folderitems(self):
@@ -93,9 +83,7 @@ class StorageUnitsView(BikaListingView):
             obj = items[x]['obj']
             items[x]['Temperature'] = obj.getTemperature()
             items[x]['Department'] = obj.getDepartmentTitle()
-            items[x]['Floor'] = obj.getFloor()
             items[x]['Address'] = obj.getAddress()
-            items[x]['StorageInstructions'] = obj.getStorageInstructions()
             items[x]['replace']['Title'] = "<a href='%s'>%s</a>" % \
                  (items[x]['url'], items[x]['Title'])
         return items

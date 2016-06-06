@@ -177,21 +177,6 @@ def generateUniqueId(context):
                     new_id = new_id.zfill(int(padding))
                 return ('%s%s' + separator + '%s') % (prefix, year, new_id)
 
-        if context.portal_type == "StorageOrder":
-            if context.getPrefix():
-                prefix = context.getPrefix()
-                if context.aq_parent.portal_type == "StorageUnit":
-                    padding = 3
-                    year = DateTime().strftime("%Y")[2:]
-                    new_id = next_id(prefix+year)
-                    if padding:
-                        new_id = new_id.zfill(int(padding))
-                    return ('%s%s' + '-' + '%s') % (prefix, year, new_id)
-                else:
-                    return context.getPrefix()
-
-            raise AssertionError('You have to specify a prefix for Storage Order')
-
         if context.portal_type == "StorageUnit":
             if context.getStorageUnitID():
                 return context.getStorageUnitID()
@@ -211,6 +196,12 @@ def generateUniqueId(context):
                     new_id = new_id.zfill(int(padding))
                 return ('%s%s' + '-' + '%s') % (prefix, year, new_id)
             else:
+                l = context.Title().split(' ')
+                if len(l) == 2:
+                    return l[1]
+                elif len(l) == 1:
+                    return l[0]
+                
                 return context.Title().replace(' ', '')
 
         if context.portal_type == "Kit":
@@ -225,10 +216,20 @@ def generateUniqueId(context):
         if context.portal_type == "StorageLocation":
             return context.Title()
 
+        if context.portal_type == "Sampletemp":
+            subject = context.getSubjectID()
+            prefix = subject + '-SP' if subject else 'SP'
+            padding = 3
+            new_id = next_id(prefix)
+            if padding:
+                new_id = new_id.zfill(int(padding))
+
+            return ('%s' + '-' + '%s') % (prefix, new_id)
+
         # no prefix; use portal_type
         # no year inserted here
         # use "IID" normalizer, because we want portal_type to be lowercased.
-        prefix = id_normalize(context.portal_type);
+        prefix = id_normalize(context.portal_type)
         new_id = next_id(prefix)
         return ('%s' + separator + '%s') % (prefix, new_id)
 

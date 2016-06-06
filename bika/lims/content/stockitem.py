@@ -15,15 +15,6 @@ from Products.CMFCore.utils import getToolByName
 import sys
 
 schema = BikaSchema.copy() + Schema((
-    StringField(
-        'StockItemID',
-        searchable=True,
-        validators=('uniquefieldvalidator',),
-        widget=StringWidget(
-            visible=True,
-            label=_("Stock item ID"),
-        )
-    ),
     ReferenceField('Product',
         required=1,
         vocabulary_display_path_bound = sys.maxint,
@@ -67,12 +58,7 @@ schema = BikaSchema.copy() + Schema((
     ),
     StringField('orderId',
         widget = StringWidget(
-            label=_("Order Id"),
-        )
-    ),
-    StringField('labId',
-        widget = StringWidget(
-            label=_("Lab Id"),
+            label=_("Invoice Number"),
         )
     ),
     StringField('batchId',
@@ -83,6 +69,12 @@ schema = BikaSchema.copy() + Schema((
     StringField('location',
         widget = StringWidget(
             label=_("Location"),
+        )
+    ),
+    StringField('receivedBy',
+        widget=StringWidget(
+            label=_("Received By"),
+            description="Provide full-name of the person receiving the current product in stock."
         )
     ),
     DateTimeField('dateReceived',
@@ -125,8 +117,7 @@ schema['title'].required = False
 schema['title'].widget.visible = False
 schema['description'].schemata = 'default'
 schema['description'].widget.visible = True
-schema.moveField('StockItemID', before='description')
-schema.moveField('Product', before='StockItemID')
+schema.moveField('Product', before='description')
 
 class StockItem(BaseContent):
     implements(IStockItem)

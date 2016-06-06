@@ -42,7 +42,6 @@ class ARAnalysesField(ObjectField):
             other kwargs are passed to bika_analysis_catalog
 
         """
-
         full_objects = False
         if 'full_objects' in kwargs:
             full_objects = kwargs['full_objects']

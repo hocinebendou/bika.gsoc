@@ -51,6 +51,8 @@ class StorageLocationsView(BikaListingView):
                           'toggle': True},
             'StockItem': {'title': _('Stock Item'),
                           'toggle': True},
+            'Sampletemp': {'title': _('Sample'),
+                          'toggle': True},
         }
 
         # ________________________________ #
@@ -70,6 +72,7 @@ class StorageLocationsView(BikaListingView):
                          'Type',
                          'Hierarchy',
                          'StockItem',
+                         'Sampletemp',
                         ]},
             {'id':'inactive',
              'title': _('Dormant'),
@@ -80,6 +83,7 @@ class StorageLocationsView(BikaListingView):
                          'Type',
                          'Hierarchy',
                          'StockItem',
+                         'Sampletemp',
                         ]},
             {'id': 'position_free',
              'title': _('Free'),
@@ -100,7 +104,8 @@ class StorageLocationsView(BikaListingView):
                                'sort_on': 'created',
                                'sort_order': 'reverse'},
              'transitions': [{'id': 'deactivate'},
-                             {'id': 'occupy'}, ],
+                             {'id': 'free'},
+                             {'id': 'occupy'}],
              'columns': ['Title',
                          'Room',
                          'Type',
@@ -111,12 +116,15 @@ class StorageLocationsView(BikaListingView):
              'contentFilter': {'review_state': 'position_occupied',
                                'sort_on': 'created',
                                'sort_order': 'reverse'},
-             'transitions': [{'id': 'deactivate'},],
+             'transitions': [{'id': 'deactivate'},
+                             {'id': 'free'},
+                             {'id': 'reserve'},],
              'columns': ['Title',
                          'Room',
                          'Type',
                          'Hierarchy',
                          'StockItem',
+                         'Sampletemp',
                          ]},
             {'id':'all',
              'title': _('All'),
@@ -127,6 +135,7 @@ class StorageLocationsView(BikaListingView):
                          'Type',
                          'Hierarchy',
                          'StockItem',
+                         'Sampletemp',
                         ]},
         ]
 
@@ -141,6 +150,7 @@ class StorageLocationsView(BikaListingView):
             items[x]['Type'] = obj.getStorageType()
             items[x]['Hierarchy'] = obj.getHierarchy()
             items[x]['StockItem'] = obj.getProduct() and obj.getProduct().Title() or ''
+            items[x]['Sampletemp'] = obj.getSampletemp() and obj.getSampletemp().Title() or ''
             # if obj.aq_parent.portal_type == 'Client':
             #     items[x]['Owner'] = obj.aq_parent.Title()
             # else:

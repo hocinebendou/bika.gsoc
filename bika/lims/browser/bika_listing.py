@@ -270,7 +270,7 @@ class BikaListingView(BrowserView):
 
     # setting pagesize to 0 specifically disables the batch size dropdown.
     pagesize = 30
-
+    pagenumber = 1
     # select checkbox is normally called uids:list
     # if table_only is set then the context form tag might require
     # these to have a different name=FieldName:list.
@@ -547,6 +547,10 @@ class BikaListingView(BrowserView):
         self.request.set('pagesize', self.pagesize)
         # and we want to make our choice remembered in bika_listing also
         self.request.set(self.form_id + '_pagesize', self.pagesize)
+
+        # Hocine added this line tryin to show the record in a list in different
+        # pages.
+        # self.request.set('show_all', 'true')
 
         # index filters.
         self.And = []
@@ -912,6 +916,7 @@ class BikaListingView(BrowserView):
             except:
                 rs = 'active'
                 st_title = None
+
             if rs:
                 results_dict['review_state'] = rs
             for state_var, state in states.items():

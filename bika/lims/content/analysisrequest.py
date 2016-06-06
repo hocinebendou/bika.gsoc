@@ -1972,6 +1972,8 @@ class AnalysisRequest(BaseFolder):
         for an in ans:
             an = an.getObject()
             br = an.getBackReferences('WorksheetAnalysis')
+            print br
+            print '---------'
             if (len(br) > 0):
                 ws = br[0]
                 was = ws.getAnalyses()

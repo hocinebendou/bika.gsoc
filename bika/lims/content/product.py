@@ -27,6 +27,28 @@ schema = BikaSchema.copy() + Schema((
             description = _(""),
         ),
     ),
+    ReferenceField('Manufacturer',
+        vocabulary='getManufacturers',
+        allowed_types=('Manufacturer',),
+        relationship='InstrumentManufacturer',
+        required=1,
+        widget=SelectionWidget(
+           format='select',
+           label=_("Manufacturer"),
+           visible={'view': 'invisible', 'edit': 'visible'}
+        ),
+    ),
+    ReferenceField('Supplier',
+        vocabulary='getSuppliers',
+        allowed_types=('Supplier',),
+        relationship='InstrumentSupplier',
+        required=1,
+        widget=SelectionWidget(
+           format='select',
+           label=_("Supplier"),
+           visible={'view': 'invisible', 'edit': 'visible'}
+        ),
+    ),
     ComputedField('SupplierUID',
         expression = 'context.aq_parent.UID()',
         widget = ComputedWidget(
@@ -51,31 +73,6 @@ schema = BikaSchema.copy() + Schema((
             label=_("Hazardous"),
             description=_("Samples of this type should be treated as hazardous"),
         ),
-    ),
-    IntegerField('Quantity',
-        widget = IntegerWidget(
-            label=_("Quantity"),
-            description=_("The number of items of this product already in "
-                          "storage. eg. 15, 100"),
-        ),
-    ),
-    StringField('Unit',
-        widget = StringWidget(
-            label=_("Unit"),
-            description=_(" Unit for the quantity eg. ml or kg"),
-        ),
-    ),
-    StringField('Toxicity',
-        widget = StringWidget(
-            label=_("Toxicity"),
-            description=_("Toxic exposure limit eg. 25 ppm (8hr TWA)"),
-        ),
-    ),
-    TextField('HealthEffects',
-        default_output_type = 'text/plain',
-        allowable_content_types = ('text/plain',),
-        widget=TextAreaWidget (
-            label = _("Health Effects")),
     ),
     FileField('FirstAidSOP',
         schemata="Documents",
@@ -163,6 +160,22 @@ class Product(BaseContent):
                      inactive_state='active'):
             deps.append((d.UID, d.Title))
         return DisplayList(deps)
+
+    def getManufacturers(self):
+        bsc = getToolByName(self, 'bika_setup_catalog')
+        items = [(c.UID, c.Title) \
+                 for c in bsc(portal_type='Manufacturer',
+                              inactive_state='active')]
+        items.sort(lambda x, y: cmp(x[1], y[1]))
+        return DisplayList(items)
+
+    def getSuppliers(self):
+        bsc = getToolByName(self, 'bika_setup_catalog')
+        items = [(c.UID, c.getName) \
+                 for c in bsc(portal_type='Supplier',
+                              inactive_state='active')]
+        items.sort(lambda x, y: cmp(x[1], y[1]))
+        return DisplayList(items)
 
     def getTotalPrice(self):
         """ compute total price """

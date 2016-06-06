@@ -1765,7 +1765,7 @@ class Reference_Definitions(WorksheetImporter):
                                       row.get('service'))
             self.results[
                 row['ReferenceDefinition_title']].append({
-                    'uid': service.UID(),
+                    'uid': service and service.UID() or '',
                     'result': row['result'] if row['result'] else '0',
                     'min': row['min'] if row['min'] else '0',
                     'max': row['max'] if row['max'] else '0'})
