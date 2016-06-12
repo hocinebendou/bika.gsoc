@@ -280,13 +280,7 @@ Colum Headers
                class="bika_listing_show_more"
                i18n:translate="">Show more</a>
             </tal:showmore>
-            <!--?<div tal:define="Batch python:modules['plone.batching'].Batch;-->
-                   <!--?b_size python:20;b_start python:0;b_start request/b_start | b_start;-->
-                   <!--?batch python:Batch(view.batch, b_size, int(b_start), orphan=1);">-->
-            <!--?<tal:batchnavigation-->
-                 <!--?define="batchnavigation nocall:context/@@batchnavigation"-->
-                 <!--?replace="structure python:batchnavigation(view.batch)" />-->
-            <!--?</div>-->
+
         </td>
     </tr>
 </table>

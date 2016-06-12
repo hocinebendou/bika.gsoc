@@ -74,32 +74,35 @@
                                                             name python:'number-' + str(item['prodid'])"/>
                                     </div>
                                 </td>
-                                <td tal:condition="received">
-                                    <div class="center" tal:condition="item/all_stored"> - </div>
-                                    <div style="width:100%" class="field ArchetypesReferenceWidget center" tal:condition="python:not item['all_stored']">
+                                <td tal:condition="received" class="center">
+                                    <div  tal:condition="item/all_stored"> - </div>
+                                    <div style="width:100%;margin:0 auto;" class="field ArchetypesReferenceWidget" tal:condition="python:not item['all_stored']">
+
+
                                         <input
                                             type="text"
+                                            id="StorageInventory"
                                             class="blurrable firstToFocus referencewidget"
                                             value=""
                                             size=25
                                             tal:attributes="name python:'storage-' + str(item['prodid'])"
-                                            base_query='{"portal_type": "StorageLevel", "object_provides": "bika.lims.interfaces.IStorageLevelIsAssignable"}'
+                                            base_query='{"portal_type": "StorageInventory", "object_provides": "bika.sanbi.interfaces.IInventoryAssignable"}'
                                             search_query='{}'
                                             catalog_name="bika_setup_catalog"
-                                            ui_item="Hierarchy"
+                                            ui_item="Title"
                                             autocomplete="false"
                                             combogrid_options='{"colModel":[{
-                                                                    "columnName": "Hierarchy",
+                                                                    "columnName": "Title",
                                                                     "align": "left",
-                                                                    "label": "Storage Level",
-                                                                    "width": "90"
+                                                                    "label": "Title",
+                                                                    "width": "20"
                                                                 }, {
-                                                                    "columnName": "NumberOfAvailableChildren",
+                                                                    "columnName": "Description",
                                                                     "align": "center",
-                                                                    "label": "no.",
-                                                                    "width": "10"
+                                                                    "label": "Description",
+                                                                    "width": "80"
                                                                 }],
-                                                                "search_fields": ["Hierarchy"],
+                                                                "search_fields": ["Title"],
                                                                 "catalog_name": "bika_setup_catalog",
                                                                 "url": "referencewidget_search",
 
@@ -110,9 +113,11 @@
                                                                 "minLength": "0",
                                                                 "resetButton": false,
                                                                 "sord": "asc",
-                                                                "sidx": "Hierarchy",
+                                                                "sidx": "Title",
                                                                 "force_all": true,
                                                                 "portal_types": {}}'/>
+
+                                        <input type="hidden" name="StorageInventory_uid" id="StorageInventory_uid">
                                     </div>
                                 </td>
                                 <td class="currency">

@@ -53,7 +53,6 @@ class SupplierProductsView(ProductsView):
             obj = items[x].get('obj', None)
             if obj and hasattr(obj, 'getSupplierUID') \
                and obj.getSupplierUID() == uidsup:
-
                 cat = obj.getCategoryTitle()
                 if self.do_cats:
                     # category is for bika_listing to groups entries

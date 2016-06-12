@@ -50,7 +50,7 @@ schema = BikaSchema.copy() + Schema((
         ),
     ),
     ComputedField('SupplierUID',
-        expression = 'context.aq_parent.UID()',
+        expression = 'context.getSupplier() and context.getSupplier().UID() or ""',
         widget = ComputedWidget(
             visible = False,
         ),
@@ -72,6 +72,19 @@ schema = BikaSchema.copy() + Schema((
         widget = BooleanWidget(
             label=_("Hazardous"),
             description=_("Samples of this type should be treated as hazardous"),
+        ),
+    ),
+    IntegerField('Quantity',
+        widget=IntegerWidget(
+            label=_("Quantity"),
+            description=_("The number of items of this product already in "
+                       "storage. eg. 15, 100"),
+        ),
+    ),
+    StringField('Unit',
+        widget=StringWidget(
+            label=_("Unit"),
+            description=_(" Unit for the quantity eg. ml or kg"),
         ),
     ),
     FileField('FirstAidSOP',

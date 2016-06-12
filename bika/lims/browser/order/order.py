@@ -76,7 +76,9 @@ class EditView(BrowserView):
         # Allow adding items to this context
         context.setConstrainTypesMode(0)
         # Collect the products
+        print '+++++'
         products = context.aq_parent.objectValues('Product')
+        print '====='
         # Handle for submission and regular request
     	if 'submit' in request:
             portal_factory = getToolByName(context, 'portal_factory')
@@ -226,18 +228,30 @@ class OrderStore(BrowserView):
         context.processForm()
         levels = [sl.getObject() for sl in bsc(portal_type='StorageLevel')]
 
+        index = 0
+        print request.form
         for name in request.form:
             if not name.startswith('storage-'):
                 continue
+            if 'StorageInventory_uid' in request.form:
+                if isinstance(request.form['StorageInventory_uid'], list):
+                    uid = request.form['StorageInventory_uid'][index]
+                else:
+                    uid = request.form['StorageInventory_uid']
+            if not uid:
+                continue
+
+            containers = [c.getObject() for c in bsc(portal_type='StorageInventory', UID=uid)]
+            container = containers[0] if containers else None
+            if not container:
+                continue
+            child_container = [cc.getObject() for cc in bsc(portal_type='StorageInventory', getUnitID=container.getId())]
+
             product_id = name.lstrip('storage-')
             product_name = product_names[product_id]
             # Get available storage levels under parent
             hierarchy = request.form[name]
-            child_levels = [sl for sl in levels \
-                                if (hasattr(sl.aq_parent, 'getHierarchy') and
-                                    sl.aq_parent.getHierarchy() == hierarchy and
-                                    not sl.getHasChildren() and
-                                    not sl.getIsOccupied())]
+
             stockitems = products_dict[product_id]
             # Get number of items to store
             nid = 'number-' + product_id
@@ -251,12 +265,12 @@ class OrderStore(BrowserView):
             message = ''
             if number > len(stockitems):
                 message = _('Number entered for ' + product_name + ' is invalid.')
-            if not child_levels:
+            if not child_container:
                 message = 'Storage level is required. Please correct.'
-            if number > len(child_levels):
+            if number > len(child_container):
                 message = 'The number entered for %s is %d but the ' \
                           'storage level ( %s ) only has %d spaces.' % (
-                             product_name, number, hierarchy, len(child_levels))
+                             product_name, number, hierarchy, len(child_container))
             if message:
                 self.context.plone_utils.addPortalMessage(_(message), 'error')
                 continue
@@ -264,18 +278,18 @@ class OrderStore(BrowserView):
             # Store stock items in available levels
             stockitems = stockitems[:number]
             for i, pi in enumerate(stockitems):
-                level = child_levels[i]
-                pi.setStorageLevelID(level.getId())
+                position = child_container[i]
+                pi.setStorageLevelID(position.getId())
                 pi.setIsStored(True)
-                level.setStockItemID(pi.getId())
-                level.setIsOccupied(True)
+                position.setStockItemID(pi.getId())
+                position.setIsOccupied(True)
                 # Decrement number of available children of parent
-                nac = level.aq_parent.getNumberOfAvailableChildren()
-                level.aq_parent.setNumberOfAvailableChildren(nac - 1)
+                nac = position.aq_parent.getNumberOfAvailableChildren()
+                position.aq_parent.setNumberOfAvailableChildren(nac - 1)
                 # Increment number of items stored in Order view
                 for lineitem in self.context.order_lineitems:
                     if lineitem['Product'] == product_id:
-                        lineitem['Stored'] = lineitem['Stored'] + 1
+                        lineitem['Stored'] += 1
         request.response.redirect(context.absolute_url_path())
         return
 

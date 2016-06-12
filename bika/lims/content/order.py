@@ -23,7 +23,6 @@ from zope.component import getAdapter
 from zope.interface import implements
 from bika.lims.workflow import doActionFor
 
-
 schema = BikaSchema.copy() + Schema((
     StringField('OrderNumber',
                 required=1,
@@ -75,17 +74,17 @@ schema = BikaSchema.copy() + Schema((
         ),
     ),
     ComputedField('SupplierUID',
-                  expression = 'here.aq_parent.UID()',
-                  widget = ComputedWidget(
-                      visible=False,
-                      ),
-                  ),
+        expression = 'here.aq_parent.UID()',
+        widget = ComputedWidget(
+            visible=False,
+        ),
+    ),
     ComputedField('ProductUID',
-                  expression = 'context.getProductUIDs()',
-                  widget = ComputedWidget(
-                      visible=False,
-                      ),
-                  ),
+        expression = 'context.getProductUIDs()',
+        widget = ComputedWidget(
+            visible=False,
+        ),
+    ),
 ),
 )
 
@@ -179,7 +178,7 @@ class Order(BaseFolder):
                 renameAfterCreation(pi)
                 # Manually reindex stock item in catalog
                 self.bika_setup_catalog.reindexObject(pi)
-            product.setQuantity(product.getQuantity() + quantity)
+            # product.setQuantity(product.getQuantity() + quantity)
         self.setDateReceived(DateTime())
         self.reindexObject()
         # Print stock item stickers if opted for

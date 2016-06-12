@@ -685,6 +685,7 @@ class BikaListingView(BrowserView):
             query['%s_%s'%(self.form_id, x)] = kwargs.get(x)
         if query:
             url = url + "?" + "&".join(["%s=%s"%(x,y) for x,y in query.items()])
+
         return url
 
     def __call__(self):
