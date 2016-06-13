@@ -76,9 +76,7 @@ class EditView(BrowserView):
         # Allow adding items to this context
         context.setConstrainTypesMode(0)
         # Collect the products
-        print '+++++'
         products = context.aq_parent.objectValues('Product')
-        print '====='
         # Handle for submission and regular request
     	if 'submit' in request:
             portal_factory = getToolByName(context, 'portal_factory')
@@ -87,16 +85,21 @@ class EditView(BrowserView):
             # Clear the old line items
             context.order_lineitems = []
             # Process the order item data
-            for prodid, qty in request.form.items():
-                if prodid.startswith('product_') and int(qty) > 0:
-                    prodid = prodid.replace('product_', '')
-                    product = [pro for pro in products if pro.getId() == prodid][0]
-                    context.order_lineitems.append(
-                            {'Product': prodid,
-                             'Quantity': int(qty),
-                             'Stored': 0,
-                             'Price': product.getPrice(),
-                             'VAT': product.getVAT()})
+            data = []
+            for e in request.form.items():
+                if e[0].startswith('product_'):
+                    data.append(e)
+            data.sort(key=lambda tup: tup[0])
+
+            for prodid, qty in data:
+                prodid = prodid.replace('product_', '')
+                product = [pro for pro in products if pro.getId() == prodid][0]
+                context.order_lineitems.append(
+                        {'Product': prodid,
+                         'Quantity': int(qty),
+                         'Stored': 0,
+                         'Price': product.getPrice(),
+                         'VAT': product.getVAT()})
 
             # Redirect to the list of orders
             obj_url = context.absolute_url_path()
@@ -213,6 +216,7 @@ class OrderStore(BrowserView):
             if not product_id in products_dict:
                 products_dict[product_id] = []
             products_dict[product_id].append(pi)
+
         # Product names against their IDs used for error messages
         product_names = {}
         products = context.aq_parent.objectValues('Product')
@@ -226,10 +230,8 @@ class OrderStore(BrowserView):
         portal_factory = getToolByName(context, 'portal_factory')
         context = portal_factory.doCreate(context, context.id)
         context.processForm()
-        levels = [sl.getObject() for sl in bsc(portal_type='StorageLevel')]
 
         index = 0
-        print request.form
         for name in request.form:
             if not name.startswith('storage-'):
                 continue
@@ -240,12 +242,14 @@ class OrderStore(BrowserView):
                     uid = request.form['StorageInventory_uid']
             if not uid:
                 continue
-
+            index += 1
             containers = [c.getObject() for c in bsc(portal_type='StorageInventory', UID=uid)]
             container = containers[0] if containers else None
             if not container:
                 continue
-            child_container = [cc.getObject() for cc in bsc(portal_type='StorageInventory', getUnitID=container.getId())]
+            child_container = [cc.getObject() for cc in bsc(portal_type='StorageInventory',
+                                                            getUnitID=container.getId())
+                                              if not cc.getObject().getIsOccupied()]
 
             product_id = name.lstrip('storage-')
             product_name = product_names[product_id]

@@ -174,11 +174,12 @@ class Order(BaseFolder):
                 pi.setProduct(product)
                 pi.setOrderId(self.getId())
                 pi.setDateReceived(DateTime())
+                pi.setQuantity(1)
                 pi.unmarkCreationFlag()
                 renameAfterCreation(pi)
                 # Manually reindex stock item in catalog
                 self.bika_setup_catalog.reindexObject(pi)
-            # product.setQuantity(product.getQuantity() + quantity)
+            product.setQuantity(product.getQuantity() + quantity)
         self.setDateReceived(DateTime())
         self.reindexObject()
         # Print stock item stickers if opted for
