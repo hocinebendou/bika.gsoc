@@ -821,6 +821,9 @@ class BikaGenerator:
         addIndex(bsc, 'sortKey', 'FieldIndex')
         addIndex(bsc, 'getMethodID', 'FieldIndex')
         addIndex(bsc, 'getDocumentID', 'FieldIndex')
+        # Hocine to query stockitems
+        addIndex(bsc, 'getProductTitle', 'FieldIndex')
+        addIndex(bsc, 'getProductID', 'FieldIndex')
 
         addColumn(bsc, 'path')
         addColumn(bsc, 'UID')
@@ -875,6 +878,9 @@ class BikaGenerator:
         addColumn(bsc, 'getUnit')
         addColumn(bsc, 'getVATAmount')
         addColumn(bsc, 'getVolume')
+        # Hocine to query stockitems
+        addColumn(bsc, 'getProductTitle')
+        addColumn(bsc, 'getProductID')
 
     def setupTopLevelFolders(self, context):
         workflow = getToolByName(context, "portal_workflow")

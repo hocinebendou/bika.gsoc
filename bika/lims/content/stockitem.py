@@ -22,17 +22,17 @@ schema = BikaSchema.copy() + Schema((
         relationship='StockItemProduct',
         referenceClass=HoldingReference,
         widget=bika_ReferenceWidget(
-            label = _("Product"),
+            label=_("Product"),
             catalog_name='bika_setup_catalog',
             showOn=False,
             description=_("Start typing to filter the list of available products."),
         ),
     ),
     ComputedField('SupplierTitle',
-        expression = 'context.getProduct().getSupplierTitle()',
-        widget = ComputedWidget(
+        expression='context.getProduct().getSupplierTitle()',
+        widget=ComputedWidget(
             label=_("Supplier"),
-            visible = {'edit':'hidden', }
+            visible={'edit':'hidden', }
         ),
     ),
     ComputedField('ProductTitle',
@@ -42,16 +42,23 @@ schema = BikaSchema.copy() + Schema((
           visible={'edit':'hidden'}
         ),
     ),
+    ComputedField('ProductID',
+        expression="context.getProduct() and context.getProduct().getId() or ''",
+        widget=ComputedWidget(
+            label=_("Product Title"),
+            visible={'edit': 'hidden'}
+        ),
+    ),
     ComputedField('ProductCategoryTitle',
-        expression = 'context.getProduct().getCategoryTitle()',
-        widget = ComputedWidget(
+        expression='context.getProduct().getCategoryTitle()',
+        widget=ComputedWidget(
             label=_("Product Category"),
-            visible = {'edit':'hidden', }
+            visible={'edit':'hidden', }
         ),
     ),
     IntegerField('Quantity',
-        required = 1,
-        widget = IntegerWidget(
+        required=1,
+        widget=IntegerWidget(
             label=_("Quantity"),
             description=_("The number of product items that this stock item represents."),
         ),
@@ -62,12 +69,12 @@ schema = BikaSchema.copy() + Schema((
         )
     ),
     StringField('batchId',
-        widget = StringWidget(
+        widget=StringWidget(
             label=_("Batch Id"),
         )
     ),
     StringField('location',
-        widget = StringWidget(
+        widget=StringWidget(
             label=_("Location"),
         )
     ),
@@ -78,27 +85,27 @@ schema = BikaSchema.copy() + Schema((
         )
     ),
     DateTimeField('dateReceived',
-        searchable = 1,
-        widget = bika_DateTimeWidget(
-            label = 'Date Received'
+        searchable=1,
+        widget=bika_DateTimeWidget(
+            label='Date Received'
         ),
     ),
     DateTimeField('dateOpened',
-        searchable = 1,
-        widget = bika_DateTimeWidget(
-            label = 'Date Opened'
+        searchable=1,
+        widget=bika_DateTimeWidget(
+            label='Date Opened'
         ),
     ),
     DateTimeField('expiryDate',
-        searchable = 1,
-        widget = bika_DateTimeWidget(
-            label = 'Expiry Date'
+        searchable=1,
+        widget=bika_DateTimeWidget(
+            label='Expiry Date'
         ),
     ),
     DateTimeField('disposalDate',
-        searchable = 1,
-        widget = bika_DateTimeWidget(
-            label = 'Disposal Date'
+        searchable=1,
+        widget=bika_DateTimeWidget(
+            label='Disposal Date'
         ),
     ),
     BooleanField(
@@ -107,7 +114,7 @@ schema = BikaSchema.copy() + Schema((
         widget=BooleanWidget(visible=False),
     ),
     StringField('StorageLevelID',
-        widget = StringWidget(
+        widget=StringWidget(
             label=_("Location"),
         )
     ),
@@ -131,7 +138,7 @@ class StockItem(BaseContent):
         #self.at_post_create_script()
 
     def getProductTitle(self):
-        return self.getProduct().Title()
+        return self.getProduct() and self.getProduct().Title() or ''
 
     def getStockItemId(self):
         return self.getId()
