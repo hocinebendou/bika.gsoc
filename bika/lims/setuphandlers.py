@@ -824,6 +824,11 @@ class BikaGenerator:
         # Hocine to query stockitems
         addIndex(bsc, 'getProductTitle', 'FieldIndex')
         addIndex(bsc, 'getProductID', 'FieldIndex')
+        addIndex(bsc, 'getRoom', 'FieldIndex')
+        addIndex(bsc, 'getStorageType', 'FieldIndex')
+        addIndex(bsc, 'getBox', 'FieldIndex')
+        addIndex(bsc, 'getLocationSampleID', 'FieldIndex')
+        addIndex(bsc, 'parent_box_uid', 'FieldIndex')
 
         addColumn(bsc, 'path')
         addColumn(bsc, 'UID')
@@ -881,6 +886,10 @@ class BikaGenerator:
         # Hocine to query stockitems
         addColumn(bsc, 'getProductTitle')
         addColumn(bsc, 'getProductID')
+        addColumn(bsc, 'getRoom')
+        addColumn(bsc, 'getStorageType')
+        addColumn(bsc, 'getBox')
+        addColumn(bsc, 'getLocationSampleID')
 
     def setupTopLevelFolders(self, context):
         workflow = getToolByName(context, "portal_workflow")

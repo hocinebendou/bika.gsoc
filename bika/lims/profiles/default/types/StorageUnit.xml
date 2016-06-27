@@ -59,5 +59,17 @@
          visible="True">
   <permission value="View"/>
  </action>
+
+ <action title="Sample Storage"
+         action_id="storagemangement"
+         category="object"
+         condition_expr=""
+         icon_expr="string:${portal_url}/images/travel.png"
+         link_target=""
+         url_expr="string:${object_url}/storagemanagement"
+         i18n:attributes="title"
+         visible="True">
+  <permission value="View"/>
+ </action>
  
 </object>

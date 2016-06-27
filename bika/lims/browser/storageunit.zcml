@@ -14,4 +14,12 @@
       layer="bika.lims.interfaces.IBikaLIMS"
     />
 
+    <browser:page
+      for="bika.lims.interfaces.IStorageUnit"
+      name="storagemanagement"
+      class=".storageunit.StorageUnitManagementView"
+      permission="zope2.View"
+      layer="bika.lims.interfaces.IBikaLIMS"
+    />
+
 </configure>
