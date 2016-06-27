@@ -4,10 +4,18 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.CMFPlone.utils import safe_unicode
 from bika.lims.content.bikaschema import BikaSchema
 from bika.lims.config import PROJECTNAME
-from bika.lims import PMF, bikaMessageFactory as _
+from bika.lims import bikaMessageFactory as _
 from bika.lims.browser.widgets import ReferenceWidget as bika_ReferenceWidget
 from Products.Archetypes.references import HoldingReference
+from plone.indexer import indexer
+from bika.lims.interfaces import IStorageLocation
+from zope.interface import implements
 import sys
+
+
+@indexer(IStorageLocation)
+def get_parent_box_uid(instance):
+    return instance.getParentBox().UID()
 
 schema = BikaSchema.copy() + Schema((
 
@@ -40,10 +48,10 @@ schema = BikaSchema.copy() + Schema((
                       ],
         )),
 
-    ReferenceField('Sampletemp',
+    ReferenceField('Aliquot',
         vocabulary_display_path_bound=sys.maxint,
-        allowed_types=('Sampletemp',),
-        relationship='SampletempLocation',
+        allowed_types=('Aliquot',),
+        relationship='AliquotLocation',
         referenceClass=HoldingReference,
         widget=bika_ReferenceWidget(
            label=_("Sample"),
@@ -86,12 +94,17 @@ schema = BikaSchema.copy() + Schema((
         'Position',
         widget=StringWidget(visible=False),
     ),
+    StringField(
+        'LocationSampleID',
+        widget=StringWidget(visible=False),
+    ),
 ))
 schema['title'].widget.label=_('Address')
 schema['description'].widget.visible = True
 
 
 class StorageLocation(BaseContent, HistoryAwareMixin):
+    implements(IStorageLocation)
     security = ClassSecurityInfo()
     displayContentsTab = False
     schema = schema

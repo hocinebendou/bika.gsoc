@@ -19,6 +19,10 @@
     <adapter name="sortable_title" factory=".analysisservice.sortable_title_with_sort_key" />
     <adapter name="sortable_title" factory=".analysis.sortable_title_with_sort_key" />
 
+    <!--Hocine-->
+    <adapter name="parent_box_uid" factory=".storagelocation.get_parent_box_uid" />
+
+
     <include package="plone.app.portlets"/>
 
     <plone:portlet
