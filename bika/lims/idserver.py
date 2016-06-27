@@ -215,7 +215,7 @@ def generateUniqueId(context):
                 return ('%s' + '-' + '%s') % (prefix, new_id)
 
             elif parent.portal_type == "StorageInventory":
-                room = context.getStorageUnit().aq_parent
+                room = context.aq_parent
                 return room.id + '.' + parent.id + '.' + context.Title()
 
             else:
