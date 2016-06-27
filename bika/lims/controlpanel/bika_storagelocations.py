@@ -51,7 +51,7 @@ class StorageLocationsView(BikaListingView):
                           'toggle': True},
             'StockItem': {'title': _('Stock Item'),
                           'toggle': True},
-            'Sampletemp': {'title': _('Sample'),
+            'Aliquot': {'title': _('Aliquot'),
                           'toggle': True},
         }
 
@@ -72,7 +72,7 @@ class StorageLocationsView(BikaListingView):
                          'Type',
                          'Hierarchy',
                          'StockItem',
-                         'Sampletemp',
+                         'Aliquot',
                         ]},
             {'id':'inactive',
              'title': _('Dormant'),
@@ -83,7 +83,7 @@ class StorageLocationsView(BikaListingView):
                          'Type',
                          'Hierarchy',
                          'StockItem',
-                         'Sampletemp',
+                         'Aliquot',
                         ]},
             {'id': 'position_free',
              'title': _('Free'),
@@ -124,7 +124,7 @@ class StorageLocationsView(BikaListingView):
                          'Type',
                          'Hierarchy',
                          'StockItem',
-                         'Sampletemp',
+                         'Aliquot',
                          ]},
             {'id':'all',
              'title': _('All'),
@@ -135,7 +135,7 @@ class StorageLocationsView(BikaListingView):
                          'Type',
                          'Hierarchy',
                          'StockItem',
-                         'Sampletemp',
+                         'Aliquot',
                         ]},
         ]
 
@@ -150,7 +150,7 @@ class StorageLocationsView(BikaListingView):
             items[x]['Type'] = obj.getStorageType()
             items[x]['Hierarchy'] = obj.getHierarchy()
             items[x]['StockItem'] = obj.getProduct() and obj.getProduct().Title() or ''
-            items[x]['Sampletemp'] = obj.getSampletemp() and obj.getSampletemp().Title() or ''
+            items[x]['Aliquot'] = obj.getAliquot() and obj.getAliquot().Title() or ''
             # if obj.aq_parent.portal_type == 'Client':
             #     items[x]['Owner'] = obj.aq_parent.Title()
             # else:
