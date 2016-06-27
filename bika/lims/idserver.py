@@ -149,6 +149,7 @@ def generateUniqueId(context):
             ids.sort()
             _id = ids and ids[-1] or 0
             new_id = _id + 1
+
             return str(new_id)
 
         for d in prefixes:
@@ -204,6 +205,22 @@ def generateUniqueId(context):
                 
                 return context.Title().replace(' ', '')
 
+        if context.portal_type == "StorageInventory":
+            prefix = 'INV'
+            parent = context.aq_parent
+            new_id = next_id(prefix)
+
+            if parent.portal_type == "StorageUnit":
+                new_id = new_id.zfill(int(3))
+                return ('%s' + '-' + '%s') % (prefix, new_id)
+
+            elif parent.portal_type == "StorageInventory":
+                room = context.getStorageUnit().aq_parent
+                return room.id + '.' + parent.id + '.' + context.Title()
+
+            else:
+                raise AssertionError("Unknown Portal type")
+
         if context.portal_type == "Kit":
             prefix = context.getPrefix() and context.getPrefix() or "KIT"
             padding = 3
@@ -216,7 +233,7 @@ def generateUniqueId(context):
         if context.portal_type == "StorageLocation":
             return context.Title()
 
-        if context.portal_type == "Sampletemp":
+        if context.portal_type == "Aliquot":
             subject = context.getSubjectID()
             prefix = subject + '-SP' if subject else 'SP'
             padding = 3
