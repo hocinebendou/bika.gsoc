@@ -49,9 +49,7 @@ class StorageLocationsView(BikaListingView):
                      'toggle': True},
             'Hierarchy': {'title': _('Hierarchy'),
                           'toggle': True},
-            'StockItem': {'title': _('Stock Item'),
-                          'toggle': True},
-            'Aliquot': {'title': _('Aliquot'),
+            'Sample': {'title': _('Sample'),
                           'toggle': True},
         }
 
@@ -71,8 +69,7 @@ class StorageLocationsView(BikaListingView):
                          'Room',
                          'Type',
                          'Hierarchy',
-                         'StockItem',
-                         'Aliquot',
+                         'Sample',
                         ]},
             {'id':'inactive',
              'title': _('Dormant'),
@@ -82,8 +79,7 @@ class StorageLocationsView(BikaListingView):
                          'Room',
                          'Type',
                          'Hierarchy',
-                         'StockItem',
-                         'Aliquot',
+                         'Sample',
                         ]},
             {'id': 'position_free',
              'title': _('Free'),
@@ -123,8 +119,7 @@ class StorageLocationsView(BikaListingView):
                          'Room',
                          'Type',
                          'Hierarchy',
-                         'StockItem',
-                         'Aliquot',
+                         'Sample',
                          ]},
             {'id':'all',
              'title': _('All'),
@@ -134,8 +129,7 @@ class StorageLocationsView(BikaListingView):
                          'Room',
                          'Type',
                          'Hierarchy',
-                         'StockItem',
-                         'Aliquot',
+                         'Sample',
                         ]},
         ]
 
@@ -149,8 +143,7 @@ class StorageLocationsView(BikaListingView):
             items[x]['Room'] = obj.getRoom()
             items[x]['Type'] = obj.getStorageType()
             items[x]['Hierarchy'] = obj.getHierarchy()
-            items[x]['StockItem'] = obj.getProduct() and obj.getProduct().Title() or ''
-            items[x]['Aliquot'] = obj.getAliquot() and obj.getAliquot().Title() or ''
+            items[x]['Sample'] = obj.getSample() and obj.getSample().Title() or ''
             # if obj.aq_parent.portal_type == 'Client':
             #     items[x]['Owner'] = obj.aq_parent.Title()
             # else:
@@ -212,7 +205,7 @@ class ajax_StorageLocations(BrowserView):
             client_path = self.context.getPhysicalPath()
             client_items = list(
                 bsc(portal_type = "StorageLocation",
-                    path = {"query": "/".join(client_path), "level" : 0 },
+                    path = {"query": "/".join(client_path), "level": 0},
                     inactive_state = 'active',
                     sort_on='sortable_title'))
 
