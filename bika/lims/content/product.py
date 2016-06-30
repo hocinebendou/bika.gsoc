@@ -38,19 +38,19 @@ schema = BikaSchema.copy() + Schema((
            visible={'view': 'invisible', 'edit': 'visible'}
         ),
     ),
-    ReferenceField('Supplier',
-        vocabulary='getSuppliers',
-        allowed_types=('Supplier',),
-        relationship='InstrumentSupplier',
-        required=1,
-        widget=SelectionWidget(
-           format='select',
-           label=_("Supplier"),
-           visible={'view': 'invisible', 'edit': 'visible'}
-        ),
-    ),
+    # ReferenceField('Supplier',
+    #     vocabulary='getSuppliers',
+    #     allowed_types=('Supplier',),
+    #     relationship='InstrumentSupplier',
+    #     required=1,
+    #     widget=SelectionWidget(
+    #        format='select',
+    #        label=_("Supplier"),
+    #        visible={'view': 'invisible', 'edit': 'visible'}
+    #     ),
+    # ),
     ComputedField('SupplierUID',
-        expression = 'context.getSupplier() and context.getSupplier().UID() or ""',
+        expression = 'context.aq_parent.portal_type=="Supplier" and context.aq_parent.UID() or ""',
         widget = ComputedWidget(
             visible = False,
         ),

@@ -215,7 +215,7 @@ def generateUniqueId(context):
                 return ('%s' + '-' + '%s') % (prefix, new_id)
 
             elif parent.portal_type == "StorageInventory":
-                room = context.getStorageUnit().aq_parent
+                room = context.aq_parent.aq_parent
                 return room.id + '.' + parent.id + '.' + context.Title()
 
             else:
@@ -234,8 +234,18 @@ def generateUniqueId(context):
             return context.Title()
 
         if context.portal_type == "Aliquot":
-            subject = context.getSubjectID()
-            prefix = subject + '-SP' if subject else 'SP'
+            # subject = context.getSubjectID()
+            # prefix = subject + '-SP' if subject else 'SP'
+            prefix = 'AL'
+            padding = 3
+            new_id = next_id(prefix)
+            if padding:
+                new_id = new_id.zfill(int(padding))
+
+            return ('%s' + '-' + '%s') % (prefix, new_id)
+
+        if context.portal_type == "Biospecimen":
+            prefix = "BS"
             padding = 3
             new_id = next_id(prefix)
             if padding:
