@@ -79,13 +79,6 @@ schema = BikaSchema.copy() + Schema((
             label = _("First Aid SOP")),
             description=_("Standard operating procedures for first aid."),
     ),
-    # TextField('StorageConditions',
-    #     default_output_type = 'text/plain',
-    #     allowable_content_types = ('text/plain',),
-    #     widget=TextAreaWidget (
-    #         label = _("Storage Conditions")),
-    #         description=_("Requirements for storing the product."),
-    # ),
     FileField('DisposalSOP',
         schemata="Documents",
         widget=FileWidget (

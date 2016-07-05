@@ -166,7 +166,7 @@ class OrderPublishView(BrowserView):
         # print order.order_lineitems
         items = order.order_lineitems
         # products = order.aq_parent.objectValues('Product')
-        products = get_supplier_products(self.context)
+        products = self.context.get_supplier_products()
         item_list = []
         grand_total = 0.00
         for item in items:
