@@ -1,18 +1,14 @@
 from AccessControl import ClassSecurityInfo
 from zope.interface import implements
-from Products.Archetypes import atapi
 from bika.lims import bikaMessageFactory as _
-from Products.ATContentTypes.content import base
-from Products.ATContentTypes.content import schemata
 from Products.CMFCore.utils import getToolByName
 from bika.lims.interfaces import IProduct
 from bika.lims import config
 from bika.lims.content.bikaschema import BikaSchema
-from DateTime.DateTime import DateTime
 from decimal import Decimal
 from Products.Archetypes.public import *
 from Products.Archetypes.references import HoldingReference
-import sys
+from bika.sanbi.browser.widgets import ProductSuppliersWidget
 
 schema = BikaSchema.copy() + Schema((
     ReferenceField('Category',
@@ -38,17 +34,7 @@ schema = BikaSchema.copy() + Schema((
            visible={'view': 'invisible', 'edit': 'visible'}
         ),
     ),
-    # ReferenceField('Supplier',
-    #     vocabulary='getSuppliers',
-    #     allowed_types=('Supplier',),
-    #     relationship='InstrumentSupplier',
-    #     required=1,
-    #     widget=SelectionWidget(
-    #        format='select',
-    #        label=_("Supplier"),
-    #        visible={'view': 'invisible', 'edit': 'visible'}
-    #     ),
-    # ),
+
     ComputedField('SupplierUID',
         expression = 'context.aq_parent.portal_type=="Supplier" and context.aq_parent.UID() or ""',
         widget = ComputedWidget(
@@ -93,13 +79,13 @@ schema = BikaSchema.copy() + Schema((
             label = _("First Aid SOP")),
             description=_("Standard operating procedures for first aid."),
     ),
-    TextField('StorageConditions',
-        default_output_type = 'text/plain',
-        allowable_content_types = ('text/plain',),
-        widget=TextAreaWidget (
-            label = _("Storage Conditions")),
-            description=_("Requirements for storing the product."),
-    ),
+    # TextField('StorageConditions',
+    #     default_output_type = 'text/plain',
+    #     allowable_content_types = ('text/plain',),
+    #     widget=TextAreaWidget (
+    #         label = _("Storage Conditions")),
+    #         description=_("Requirements for storing the product."),
+    # ),
     FileField('DisposalSOP',
         schemata="Documents",
         widget=FileWidget (
@@ -150,6 +136,16 @@ schema = BikaSchema.copy() + Schema((
             visible = {'edit':'hidden', }
         ),
     ),
+
+    ReferenceField('Supplier',
+        required=1,
+        multiValued=1,
+        allowed_types=('Supplier',),
+        relationship='ProductSuppliers',
+        widget=ProductSuppliersWidget(
+           label=_("Suppliers"),
+           description="",
+        )),
 ))
 
 schema['description'].schemata = 'default'

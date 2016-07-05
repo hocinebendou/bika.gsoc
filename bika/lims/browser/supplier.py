@@ -33,8 +33,11 @@ class SupplierProductsView(ProductsView):
 
     def __init__(self, context, request):
         super(SupplierProductsView, self).__init__(context, request)
+        self.context = context
+        self.request = request
+        self.context_actions = {}
         self.categories = []
-        self.do_cats = self.context.bika_setup.getCategoriseProducts()
+        self.do_cats = context.bika_setup.getCategoriseProducts()
         if self.do_cats:
             self.pagesize = 0  # hide batching controls
             self.show_categories = True
@@ -51,21 +54,21 @@ class SupplierProductsView(ProductsView):
         outitems = []
         for x in range(len(items)):
             obj = items[x].get('obj', None)
-            if obj and hasattr(obj, 'getSupplierUID') \
-               and obj.getSupplierUID() == uidsup:
-                cat = obj.getCategoryTitle()
-                if self.do_cats:
-                    # category is for bika_listing to groups entries
-                    items[x]['category'] = cat
-                    if cat not in self.categories:
-                        self.categories.append(cat)
-                after_icons = ''
-                if obj.getHazardous():
-                    after_icons = ("<img src='++resource++bika.lims.images/"
-                                   "hazardous.png' title='Hazardous'>")
-                items[x]['replace']['Title'] = "<a href='%s'>%s</a>&nbsp;%s" % \
-                     (items[x]['url'], items[x]['Title'], after_icons)
-                outitems.append(items[x])
+            for supplier in obj.getSupplier():
+                if supplier.UID() == uidsup:
+                    cat = obj.getCategoryTitle()
+                    if self.do_cats:
+                        # category is for bika_listing to groups entries
+                        items[x]['category'] = cat
+                        if cat not in self.categories:
+                            self.categories.append(cat)
+                    after_icons = ''
+                    if obj.getHazardous():
+                        after_icons = ("<img src='++resource++bika.lims.images/"
+                                       "hazardous.png' title='Hazardous'>")
+                    items[x]['replace']['Title'] = "<a href='%s'>%s</a>&nbsp;%s" % \
+                         (items[x]['url'], items[x]['Title'], after_icons)
+                    outitems.append(items[x])
         return outitems
 
 

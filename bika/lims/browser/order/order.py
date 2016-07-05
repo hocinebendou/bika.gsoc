@@ -12,6 +12,7 @@ from plone.app.layout.viewlets.common import ViewletBase
 from zope.component import getMultiAdapter
 import itertools
 
+
 class OrderView(BrowserView):
     template = ViewPageTemplateFile('templates/order_view.pt')
     title = _('Inventory Order')
@@ -34,7 +35,8 @@ class OrderView(BrowserView):
         self.title = context.Title()
         # Collect order item data
         items = context.order_lineitems
-        products = context.aq_parent.objectValues('Product')
+        # products = context.aq_parent.objectValues('Product')
+        products = context.get_supplier_products()
         self.items = []
         for item in items:
             prodid = item['Product']
@@ -73,10 +75,13 @@ class EditView(BrowserView):
         request = self.request
         context = self.context
         setup = portal.bika_setup
+        catalog = getToolByName(context, 'bika_setup_catalog')
+        brains = catalog(portal_type='Product', inactive_state='active')
         # Allow adding items to this context
         context.setConstrainTypesMode(0)
         # Collect the products
-        products = context.aq_parent.objectValues('Product')
+        #products = context.aq_parent.objectValues('Product')
+        products = context.get_supplier_products()
         # Handle for submission and regular request
     	if 'submit' in request:
             portal_factory = getToolByName(context, 'portal_factory')
@@ -219,7 +224,8 @@ class OrderStore(BrowserView):
 
         # Product names against their IDs used for error messages
         product_names = {}
-        products = context.aq_parent.objectValues('Product')
+        # products = context.aq_parent.objectValues('Product')
+        products = context.get_supplier_products()
         for pr in products:
             product_names[pr.getId()] = pr.Title()
 
@@ -232,7 +238,7 @@ class OrderStore(BrowserView):
         context.processForm()
 
         index = 0
-        for name in request.form:
+        for name, _ in sorted(request.form.iteritems(), key=lambda (k, v): (k, v)):
             if not name.startswith('storage-'):
                 continue
             if 'StorageInventory_uid' in request.form:
@@ -285,11 +291,13 @@ class OrderStore(BrowserView):
                 position = child_container[i]
                 pi.setStorageLevelID(position.getId())
                 pi.setIsStored(True)
-                position.setStockItemID(pi.getId())
+                # set inventory stock item position
+                position.setISID(pi.getId())
                 position.setIsOccupied(True)
                 # Decrement number of available children of parent
                 nac = position.aq_parent.getNumberOfAvailableChildren()
                 position.aq_parent.setNumberOfAvailableChildren(nac - 1)
+                position.reindexObject(idxs=["getISID"])
                 # Increment number of items stored in Order view
                 for lineitem in self.context.order_lineitems:
                     if lineitem['Product'] == product_id:

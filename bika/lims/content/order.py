@@ -22,6 +22,8 @@ from Products.CMFPlone.utils import safe_unicode
 from zope.component import getAdapter
 from zope.interface import implements
 from bika.lims.workflow import doActionFor
+from Products.CMFCore.utils import getToolByName
+
 
 schema = BikaSchema.copy() + Schema((
     StringField('OrderNumber',
@@ -150,6 +152,21 @@ class Order(BaseFolder):
                      ((Decimal(lineitem['VAT']) /100) + 1)
         return total
 
+    def get_supplier_products(self):
+        """Return supplier products.
+        """
+        catalog = getToolByName(self, 'bika_setup_catalog')
+        brains = catalog(portal_type='Product', inactive_state='active')
+        products = []
+        for brain in brains:
+            # TODO: May be we need to create an index column for getSupplier?
+            product = brain.getObject()
+            for supplier in product.getSupplier():
+                if supplier.UID() == self.aq_parent.UID():
+                    products.append(product)
+
+        return products
+
     def workflow_script_dispatch(self):
         """ dispatch order """
         self.setDateDispatched(DateTime())
@@ -161,7 +178,8 @@ class Order(BaseFolder):
 
     def workflow_script_receive(self):
         """ receive order """
-        products = self.aq_parent.objectValues('Product')
+        # products = self.aq_parent.objectValues('Product')
+        products = self.get_supplier_products()
         items = self.order_lineitems
         for item in items:
             quantity = int(item['Quantity'])
