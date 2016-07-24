@@ -197,7 +197,9 @@ class Order(BaseFolder):
                 renameAfterCreation(pi)
                 # Manually reindex stock item in catalog
                 self.bika_setup_catalog.reindexObject(pi)
-            product.setQuantity(product.getQuantity() + quantity)
+
+            prd_qtty = product.getQuantity() and product.getQuantity() or 0
+            product.setQuantity(prd_qtty + quantity)
         self.setDateReceived(DateTime())
         self.reindexObject()
         # Print stock item stickers if opted for
