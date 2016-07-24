@@ -18,7 +18,7 @@ schema = BikaSchema.copy() + Schema((
     ReferenceField('Product',
         required=1,
         vocabulary_display_path_bound = sys.maxint,
-        allowed_types=('Product',),
+        allowed_types=('Product', 'Kit'),
         relationship='StockItemProduct',
         referenceClass=HoldingReference,
         widget=bika_ReferenceWidget(
@@ -28,13 +28,15 @@ schema = BikaSchema.copy() + Schema((
             description=_("Start typing to filter the list of available products."),
         ),
     ),
-    ComputedField('SupplierTitle',
-        expression='context.getProduct().getSupplierTitle()',
-        widget=ComputedWidget(
-            label=_("Supplier"),
-            visible={'edit':'hidden', }
-        ),
-    ),
+
+    # ComputedField('SupplierTitle',
+    #     expression='context.getProduct().getSupplierTitle()',
+    #     widget=ComputedWidget(
+    #         label=_("Supplier"),
+    #         visible={'edit':'hidden', }
+    #     ),
+    # ),
+
     ComputedField('ProductTitle',
         expression='context.getProduct().Title()',
         widget=ComputedWidget(
@@ -42,6 +44,7 @@ schema = BikaSchema.copy() + Schema((
           visible={'edit':'hidden'}
         ),
     ),
+
     ComputedField('ProductID',
         expression="context.getProduct() and context.getProduct().getId() or ''",
         widget=ComputedWidget(
@@ -49,6 +52,7 @@ schema = BikaSchema.copy() + Schema((
             visible={'edit': 'hidden'}
         ),
     ),
+
     ComputedField('ProductCategoryTitle',
         expression='context.getProduct().getCategoryTitle()',
         widget=ComputedWidget(
@@ -56,6 +60,7 @@ schema = BikaSchema.copy() + Schema((
             visible={'edit':'hidden', }
         ),
     ),
+
     IntegerField('Quantity',
         required=1,
         widget=IntegerWidget(
@@ -63,56 +68,66 @@ schema = BikaSchema.copy() + Schema((
             description=_("The number of product items that this stock item represents."),
         ),
     ),
+
     StringField('orderId',
         widget = StringWidget(
             label=_("Invoice Number"),
         )
     ),
+
     StringField('batchId',
         widget=StringWidget(
             label=_("Batch Id"),
         )
     ),
+
     StringField('location',
         widget=StringWidget(
             label=_("Location"),
         )
     ),
+
     StringField('receivedBy',
         widget=StringWidget(
             label=_("Received By"),
             description="Provide full-name of the person receiving the current product in stock."
         )
     ),
+
     DateTimeField('dateReceived',
         searchable=1,
         widget=bika_DateTimeWidget(
             label='Date Received'
         ),
     ),
+
     DateTimeField('dateOpened',
         searchable=1,
         widget=bika_DateTimeWidget(
             label='Date Opened'
         ),
     ),
+
     DateTimeField('expiryDate',
         searchable=1,
         widget=bika_DateTimeWidget(
             label='Expiry Date'
         ),
     ),
+
     DateTimeField('disposalDate',
         searchable=1,
         widget=bika_DateTimeWidget(
             label='Disposal Date'
         ),
     ),
+
     BooleanField(
         'IsStored',
         default=False,
         widget=BooleanWidget(visible=False),
     ),
+
     StringField('StorageLevelID',
         widget=StringWidget(
             label=_("Location"),
