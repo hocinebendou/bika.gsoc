@@ -82,7 +82,6 @@ class StockItemsView(BikaListingView):
                          'orderId',
                          'batchId',
                          'product',
-                         'supplier',
                          'productCategory',
                          'location',
                          'storageLevelId',
@@ -99,7 +98,6 @@ class StockItemsView(BikaListingView):
                          'orderId',
                          'batchId',
                          'product',
-                         'supplier',
                          'productCategory',
                          'location',
                          'storageLevelId',
@@ -115,7 +113,6 @@ class StockItemsView(BikaListingView):
                          'orderId',
                          'batchId',
                          'product',
-                         'Supplier',
                          'ProductCategory',
                          'location',
                          'storageLevelId',
@@ -134,7 +131,6 @@ class StockItemsView(BikaListingView):
             items[x]['orderId'] = obj.getOrderId()
             items[x]['batchId'] = obj.getBatchId()
             items[x]['product'] = obj.getProductTitle()
-            items[x]['supplier'] = obj.getSupplierTitle()
             items[x]['productCategory'] = obj.getProductCategoryTitle()
             items[x]['location'] = obj.getLocation()
             items[x]['storageLevelId'] = obj.getStorageLevelID()
